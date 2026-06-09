@@ -87,7 +87,7 @@ export async function POST(req: Request) {
     consultation.photosUploaded = true;
 
     if (consultation.intakeCompleted) {
-      consultation.status = "submitted";
+     consultation.status = "active";
     } else {
       consultation.status = "pending_intake";
     }

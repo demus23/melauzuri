@@ -56,15 +56,19 @@ export async function POST(req: Request) {
     };
 
     consultation.intakeCompleted = true;
-    consultation.status = "submitted";
+    consultation.status = "active";
 
     await consultation.save();
 
-    await sendEmail({
-      to: user.email,
-      subject: "Your consultation has been submitted",
-      html: consultationSubmittedEmail(user.name || body.fullName || "there"),
-    });
+    try {
+  await sendEmail({
+    to: user.email,
+    subject: "Your consultation has been submitted",
+    html: consultationSubmittedEmail(user.name || body.fullName || "there"),
+  });
+} catch (emailError) {
+  console.error("Consultation email failed:", emailError);
+}
 
     if (process.env.ADMIN_EMAIL) {
       await sendEmail({
