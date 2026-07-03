@@ -9,24 +9,39 @@ import styles from "./photos.module.css";
 
 const photoTips = [
   "Take photos in bright natural light or strong indoor light.",
-  "Upload front, left, and right side angles.",
   "Do not use beauty filters or heavy editing.",
   "Keep your face clean if possible.",
   "Make sure the skin concern is clearly visible.",
 ];
 
+const photoSlots = [
+  { id: "frontFace", label: "Front Face" },
+  { id: "leftSide", label: "Left Side" },
+  { id: "rightSide", label: "Right Side" },
+  { id: "affectedAreas", label: "Affected Areas" },
+] as const;
+
+type SlotId = typeof photoSlots[number]["id"];
+
 export default function ConsultationPhotosPage() {
   const router = useRouter();
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<Record<SlotId, File | null>>({
+    frontFace: null,
+    leftSide: null,
+    rightSide: null,
+    affectedAreas: null,
+  });
   const [loading, setLoading] = useState(false);
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const selected = Array.from(e.target.files || []);
-    setFiles(selected);
+  function handleSlotChange(slot: SlotId, e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] || null;
+    setFiles((prev) => ({ ...prev, [slot]: file }));
   }
 
+  const selectedCount = Object.values(files).filter(Boolean).length;
+
   async function handleUpload() {
-    if (files.length === 0) {
+    if (selectedCount === 0) {
       alert("Please choose at least one photo.");
       return;
     }
@@ -36,8 +51,10 @@ export default function ConsultationPhotosPage() {
     try {
       const formData = new FormData();
 
-      files.forEach((file) => {
-        formData.append("photos", file);
+      photoSlots.forEach(({ id }) => {
+        if (files[id]) {
+          formData.append(id, files[id] as File);
+        }
       });
 
       const res = await fetch("/api/consultations/photos", {
@@ -74,40 +91,26 @@ export default function ConsultationPhotosPage() {
           <section className={styles.card}>
             <h2 className={styles.h2}>Photo upload</h2>
             <p className={styles.muted}>
-              Add clear images of your skin from multiple angles.
+              Add a clear photo for each angle below.
             </p>
 
-            <div className={styles.uploadBox}>
-              <div>
-                <div className={styles.uploadIcon} aria-hidden="true" />
-                <p className={styles.uploadTitle}>Drag and drop photos here</p>
-                <p className={styles.uploadText}>
-                  or click below to choose files
-                </p>
-
-                <label className={styles.uploadBtn}>
-                  Choose photos
+            <div className={styles.slotGrid}>
+              {photoSlots.map((slot) => (
+                <label key={slot.id} className={styles.slotBox}>
                   <input
                     type="file"
-                    multiple
                     accept="image/*"
                     hidden
-                    onChange={handleFileChange}
+                    onChange={(e) => handleSlotChange(slot.id, e)}
                   />
+                  <div className={styles.slotIcon} aria-hidden="true" />
+                  <div className={styles.slotLabel}>{slot.label}</div>
+                  <div className={styles.slotStatus}>
+                    {files[slot.id] ? files[slot.id]!.name : "Tap to choose photo"}
+                  </div>
                 </label>
-              </div>
+              ))}
             </div>
-
-            {files.length > 0 && (
-              <div className={styles.fileList}>
-                <h3 className={styles.fileListTitle}>Selected files</h3>
-                <ul className={styles.listPlain}>
-                  {files.map((file) => (
-                    <li key={`${file.name}-${file.size}`}>{file.name}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
 
             <div className={styles.actions}>
               <button
@@ -120,8 +123,8 @@ export default function ConsultationPhotosPage() {
               </button>
 
               <Link href="/consultations/start" className={styles.secondary}>
-  Back to questionnaire
-</Link>
+                Back to questionnaire
+              </Link>
             </div>
           </section>
 

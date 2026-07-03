@@ -135,8 +135,8 @@
   font-weight: 950;
   font-size: 13px;
   color: #fff;
-  background: linear-gradient(135deg, var(--primary), var(--accent2));
-  box-shadow: 0 10px 24px rgba(91,140,255,0.18);
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  box-shadow: 0 10px 24px var(--primaryGlow);
 }
 
 .stepTitle{
@@ -159,9 +159,9 @@
 
 .primary{
   color: #fff;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border: 1px solid rgba(42,174,138,0.22);
-  box-shadow: 0 12px 30px rgba(42,174,138,0.16);
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  border: 1px solid rgba(200,115,58,0.28);
+  box-shadow: 0 12px 30px var(--primaryGlow);
 }
 
 .secondary{

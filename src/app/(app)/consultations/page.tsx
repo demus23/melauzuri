@@ -7,23 +7,44 @@ import ConsultationCase from "@/lib/models/ConsultationCase";
 
 const defaultSteps = [
   {
-    title: "Complete questionnaire",
-    desc: "Tell us about your skin type, main concerns, routine, and treatment history.",
+    title: "Complete skin questionnaire",
+    desc: "Tell us about your skin goals, concerns, routine, whitening cream history, melasma history, and previous treatments.",
     cta: "Start questionnaire",
     href: "/consultations/start",
   },
   {
-    title: "Upload skin photos",
-    desc: "Share clear front and side photos in good lighting for better review.",
+    title: "Upload clear skin photos",
+    desc: "Upload front, left side, right side, and close-up photos in bright natural lighting.",
     cta: "Upload photos",
     href: "/consultations/photos",
   },
   {
-    title: "Receive your plan",
-    desc: "After review, your routine and next steps will appear in your dashboard.",
-    cta: "View consultation status",
+    title: "Receive your skin plan",
+    desc: "Your case will be reviewed, and dermatologist input will be added if your concern needs specialist support.",
+    cta: "View status",
     href: "/consultations/status",
   },
+];
+
+const prepareList = [
+  "Your main skin goals",
+  "Current morning and night skincare routine",
+  "Products you are currently using",
+  "History of whitening creams, steroid creams, hydroquinone, peels, or laser",
+  "Melasma, pigmentation, acne, or sensitivity history",
+  "Lifestyle details such as sleep, stress, water intake, and diet habits",
+  "Clear front, left side, right side, and concern-area photos",
+];
+
+const supportAreas = [
+  "Whitening cream damage recovery",
+  "Melasma support and management",
+  "Hyperpigmentation and dark spots",
+  "Acne and post-acne marks",
+  "Sensitive or reactive skin",
+  "Skin barrier repair",
+  "Overall healthy skin support",
+  "Aging gracefully skin management",
 ];
 
 export default async function ConsultationsPage() {
@@ -39,36 +60,36 @@ export default async function ConsultationsPage() {
   let badge = "Consultation access active";
   let statusText = "Ready to begin";
   let heroText =
-    "Start your consultation by completing your skin information and uploading clear photos for review.";
-  let heroCta = "Start now";
+    "Start your Melazuri consultation by completing your skin questionnaire and uploading clear photos for professional review.";
+  let heroCta = "Start questionnaire";
   let heroHref = "/consultations/start";
 
   if (!consultationCase) {
     badge = "Access active";
     statusText = "Waiting for consultation record";
     heroText =
-      "Your payment access is active, but your consultation workflow record is not ready yet. If you recently completed payment, please check again shortly or contact support.";
+      "Your access is active, but your consultation record is not ready yet. If you recently completed payment, please check again shortly or contact support.";
     heroCta = "Refresh";
     heroHref = "/consultations";
   } else if (consultationCase.status === "pending_intake") {
     badge = "Consultation created";
     statusText = "Pending intake";
     heroText =
-      "Your consultation has been created. The next step is to complete your questionnaire and upload your photos.";
+      "Your consultation has been created. Complete your questionnaire and upload your photos so your case can be reviewed.";
     heroCta = "Start questionnaire";
     heroHref = "/consultations/start";
   } else if (consultationCase.status === "active") {
     badge = "Consultation in progress";
     statusText = "Under review";
     heroText =
-      "Your consultation is already in progress. You can check your current status and next updates in your dashboard.";
+      "Your consultation is now under review. You can check your status and next updates in your dashboard.";
     heroCta = "View consultation status";
     heroHref = "/consultations/status";
   } else if (consultationCase.status === "completed") {
     badge = "Consultation completed";
     statusText = "Completed";
     heroText =
-      "Your consultation has been completed. You can review your status and any next-step recommendations in your dashboard.";
+      "Your consultation has been completed. You can review your skin plan, recommendations, and next steps in your dashboard.";
     heroCta = "View consultation status";
     heroHref = "/consultations/status";
   } else if (consultationCase.status === "cancelled") {
@@ -76,8 +97,8 @@ export default async function ConsultationsPage() {
     statusText = "Cancelled";
     heroText =
       "This consultation has been cancelled. Please contact support if you believe this was a mistake.";
-    heroCta = "View consultation status";
-    heroHref = "/consultations/status";
+    heroCta = "Contact support";
+    heroHref = "/support";
   }
 
   return (
@@ -86,21 +107,43 @@ export default async function ConsultationsPage() {
         <section className={styles.hero}>
           <div>
             <div className={styles.badge}>{badge}</div>
-            <h1 className={styles.h1}>Your Consultation Dashboard</h1>
+            <h1 className={styles.h1}>Your Melazuri Consultation</h1>
             <p className={styles.p}>{heroText}</p>
+
+            <div className={styles.heroActions}>
+              <Link href={heroHref} className={styles.primary}>
+                {heroCta}
+              </Link>
+              <Link href="/pricing" className={styles.secondary}>
+                View pricing
+              </Link>
+            </div>
           </div>
 
           <div className={styles.heroCard}>
             <div className={styles.heroCardLabel}>Current status</div>
             <div className={styles.statusPill}>{statusText}</div>
+
             <p className={styles.heroCardText}>
               {consultationCase
                 ? `Consultation reference: ${String(consultationCase.reference)}`
                 : "We have not found a consultation record for your account yet."}
             </p>
-            <Link href={heroHref} className={styles.primary}>
-              {heroCta}
-            </Link>
+
+            <div className={styles.priceBox}>
+              <div>
+                <span>Consultation</span>
+                <strong>USD 50</strong>
+              </div>
+              <div>
+                <span>Dermatologist add-on if needed</span>
+                <strong>+ USD 50</strong>
+              </div>
+              <div>
+                <span>Bundle with course access</span>
+                <strong>USD 129</strong>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -108,7 +151,7 @@ export default async function ConsultationsPage() {
           <div className={styles.sectionHead}>
             <h2 className={styles.h2}>Your next steps</h2>
             <p className={styles.muted}>
-              Follow these steps to complete your consultation flow.
+              Follow these steps so your skin concern can be reviewed clearly and safely.
             </p>
           </div>
 
@@ -131,21 +174,41 @@ export default async function ConsultationsPage() {
         <section className={styles.sectionAlt}>
           <div className={styles.infoPanel}>
             <div>
+              <div className={styles.badge}>Before you start</div>
               <h2 className={styles.h2}>What to prepare</h2>
               <p className={styles.muted}>
-                Before starting, keep these details ready so your consultation
-                can be reviewed properly.
+                These details help us understand your skin history, routine, and possible triggers.
               </p>
             </div>
 
             <ul className={styles.list}>
-              <li>Your main skin concerns</li>
-              <li>Your current AM/PM routine</li>
-              <li>Products you are currently using</li>
-              <li>Recent irritation, breakouts, or pigmentation changes</li>
-              <li>Clear photos in natural or bright lighting</li>
+              {prepareList.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.sectionHead}>
+            <h2 className={styles.h2}>Common concerns we support</h2>
+            <p className={styles.muted}>
+              Melazuri focuses on education, safe guidance, and long-term skin health.
+            </p>
+          </div>
+
+          <div className={styles.grid4}>
+            {supportAreas.map((item) => (
+              <div key={item} className={styles.concernCard}>
+                {item}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.disclaimer}>
+          <strong>Important note:</strong> Melazuri provides education and skincare guidance.
+          It is not a replacement for emergency care or in-person medical diagnosis.
         </section>
       </div>
     </Shell>

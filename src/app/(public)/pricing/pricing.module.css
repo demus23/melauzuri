@@ -10,17 +10,15 @@
 
 .card {
   border-radius: 24px;
-  border: 1px solid var(--border);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 248, 235, 0.14),
-    rgba(255, 248, 235, 0.07)
-  );
+  border: 1px solid var(--borderSoft);
+  background: var(--card);
   backdrop-filter: blur(16px);
   padding: 20px;
-  box-shadow: 0 26px 70px rgba(0,0,0,0.28);
+  box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -29,21 +27,25 @@
 }
 
 .badge {
-  position: absolute;
-  top: 14px;
-  right: 14px;
+  display: inline-flex;
+  align-self: flex-start;
+  margin-bottom: 12px;
   font-size: 12px;
-  padding: 8px 10px;
+  font-weight: 700;
+  padding: 7px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(255,248,235,0.22);
-  background: rgba(255,248,235,0.10);
-  color: var(--text);
+  border: 1px solid rgba(200,115,58,0.28);
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  color: #FFFFFF;
+  box-shadow: 0 8px 20px var(--primaryGlow);
 }
 
 .title {
   margin: 0;
   font-size: 18px;
   letter-spacing: -0.2px;
+  color: var(--textStrong);
+  font-weight: 800;
 }
 
 .priceRow {
@@ -57,6 +59,15 @@
   font-size: 34px;
   font-weight: 800;
   letter-spacing: -0.8px;
+  color: var(--textStrong);
+}
+
+.priceSub {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .period {
@@ -74,26 +85,63 @@
 .list {
   margin: 14px 0 0;
   padding-left: 18px;
-  color: rgba(255,248,235,0.78);
+  color: var(--text);
   line-height: 1.9;
   font-size: 14px;
+  font-weight: 600;
 }
 
 .cta {
-  margin-top: 16px;
+  margin-top: auto;
   width: 100%;
+  display: block;
+  text-align: center;
   padding: 12px 14px;
   border-radius: 16px;
-  border: 1px solid rgba(255,248,235,0.22);
-  background: rgba(255,248,235,0.08);
-  color: var(--text);
+  border: 1px solid rgba(200,115,58,0.28);
+  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  color: #FFFFFF;
   font-weight: 700;
+  text-decoration: none;
   cursor: pointer;
+  box-shadow: 0 16px 44px var(--primaryGlow);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 52px rgba(200,115,58,0.3);
+}
+
+.trustRow {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.trustBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(46,170,126,0.08);
+  border: 1px solid rgba(46,170,126,0.18);
+}
+
+.trustIcon {
+  color: var(--okTx);
+  font-weight: 800;
 }
 
 .ctaPrimary {
-  background: linear-gradient(90deg, var(--accent), var(--accent3));
-  box-shadow: 0 16px 44px rgba(180,83,90,0.22);
+  /* Same amber styling as .cta now applies to every button;
+     kept as a class so a featured plan could be styled differently again later if needed. */
 }
 
 .note {
@@ -113,6 +161,9 @@
   margin: 0;
   font-size: 34px;
   letter-spacing: -0.6px;
+  color: var(--textStrong);
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
 }
 
 .sub {
@@ -120,4 +171,165 @@
   color: var(--muted);
   line-height: 1.6;
   max-width: 70ch;
+}
+
+/* =========================
+   PAYMENT METHODS
+   ========================= */
+
+.paymentSection {
+  margin-top: 48px;
+}
+
+.paymentHeader {
+  margin-bottom: 20px;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+}
+
+.paymentGrid {
+  max-width: 760px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.paymentCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--borderSoft);
+  background: var(--card);
+}
+
+.paymentIcon {
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.paymentLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--textStrong);
+}
+
+@media (max-width: 640px) {
+  .paymentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
+   FAQ ACCORDION
+   ========================= */
+
+.faqSection {
+  margin-top: 56px;
+}
+
+.faqHeader {
+  margin-bottom: 20px;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+}
+
+.faqH2 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: -0.4px;
+  color: var(--textStrong);
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+}
+
+.faqSub {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.faqList {
+  max-width: 760px;
+  margin: 0 auto;
+  display: grid;
+  gap: 10px;
+}
+
+.faqItem {
+  border-radius: 18px;
+  border: 1px solid var(--borderSoft);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.faqQuestion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--textStrong);
+  cursor: pointer;
+}
+
+.faqIcon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(200,115,58,0.12);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 800;
+  transition: transform 180ms ease;
+}
+
+.faqIconOpen {
+  transform: rotate(45deg);
+}
+
+.faqAnswer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms ease;
+}
+
+.faqAnswerOpen {
+  grid-template-rows: 1fr;
+}
+
+.faqAnswerInner {
+  overflow: hidden;
+}
+
+.faqAnswerText {
+  margin: 0;
+  padding: 0 18px 16px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .h1 {
+    font-size: 28px;
+  }
+
+  .faqH2 {
+    font-size: 22px;
+  }
 }

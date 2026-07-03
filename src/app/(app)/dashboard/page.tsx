@@ -79,7 +79,7 @@ export default function DashboardPage() {
             <div className={styles.card}>
               <div className={styles.cardHeader}>
                 <h2 className={styles.h2}>What you get</h2>
-                <span className={styles.kicker}>MelaninCare</span>
+                <span className={styles.kicker}>Melazuri</span>
               </div>
 
               <ul className={styles.list}>

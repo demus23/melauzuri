@@ -203,7 +203,7 @@ export default function ConsultationPage() {
             <div className={styles.expertLeft}>
               <h2 className={styles.h2}>Guidance from a licensed aesthetician</h2>
               <p className={styles.muted}>
-                MelaninCare combines professional skincare knowledge with
+                Melazuri combines professional skincare knowledge with
                 practical routines designed specifically for deeper skin tones.
               </p>
               <p className={styles.muted}>

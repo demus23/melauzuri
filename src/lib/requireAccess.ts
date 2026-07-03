@@ -5,7 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 import dbConnect from "@/lib/mongoose";
 import User from "@/lib/models/User";
 
-type AccessType = "course" | "consultation" | "admin";
+type AccessType = "course" | "consultation" | "journal" | "referral" | "admin";
 
 export async function requireAccess(type: AccessType) {
   const session = await getServerSession(authOptions);
@@ -19,13 +19,21 @@ export async function requireAccess(type: AccessType) {
 
   if (!user) redirect("/login");
 
-  // ✅ NEW: admin access check
+  // Admin access
   if (type === "admin") {
     if (user.role !== "admin") redirect("/");
     return user;
   }
 
-  // existing logic
+  // Journal + referral: available to any paying user
+  if (type === "journal" || type === "referral") {
+    const hasAnyAccess =
+      Boolean(user.hasCourseAccess) || Boolean(user.hasConsultationAccess);
+    if (!hasAnyAccess) redirect("/pricing");
+    return user;
+  }
+
+  // Course / consultation
   const ok =
     type === "course"
       ? Boolean(user.hasCourseAccess)
